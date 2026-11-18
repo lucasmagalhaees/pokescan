@@ -42,6 +42,11 @@ def upload(p):
     p.set_input_files("#file", {"name": "a.png", "mimeType": "image/png", "buffer": PNG})
 
 
+def test_sem_api_campo_de_codigo_nao_aparece(mk):
+    p = mk([NO_SPEECH], route=api("fail"))
+    assert not p.is_visible("#code-row")
+
+
 def test_health_sem_visao_ou_com_falha_esconde_fotos(mk):
     for health in ({"ok": True, "vision": False}, "fail", "500"):
         p = mk([NO_SPEECH], route=api(health))
@@ -77,6 +82,7 @@ def test_precisa_de_codigo_mostra_campo_e_salva(mk):
     p.fill("#code-in", " segredo ")
     p.click("#code-save")
     assert hidden(p, "#code-row") and p.evaluate("()=>localStorage.getItem('pbh-code')") == "segredo"
+    assert not p.is_visible("#code-row")  # visualmente some (display:flex não pode vencer [hidden])
 
 
 def test_salvar_codigo_sem_localstorage_nao_quebra(mk):

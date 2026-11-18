@@ -24,6 +24,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)
 .tab{flex:1;min-height:44px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--mut);font:inherit;font-weight:600;text-align:center;cursor:pointer}
 .tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+[hidden]{display:none!important}
 .row{display:flex;gap:8px;align-items:center}
 input[type=text]{flex:1;min-width:0;background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:11px 12px;font-size:16px}
 button{min-height:44px;background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;cursor:pointer}
@@ -64,10 +65,38 @@ select{flex:1;min-width:0;background:var(--card2);border:1px solid var(--line);c
 .verdict.big{font-size:20px;padding:16px;text-align:center}
 .row.wrap{flex-wrap:wrap}
 .lines{margin:8px 2px;line-height:1.6}
+/* polimento visual */
+:root{--sh:0 1px 2px #0003,0 4px 14px #0002;--r:16px}
+@media (prefers-color-scheme:light){:root{--sh:0 1px 2px #1a1d2410,0 4px 14px #1a1d2410}}
+h1{font-size:19px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h1 .mut{font-weight:500}
+.tabs{border-bottom:1px solid var(--line);margin-inline:-14px;padding:8px 14px;backdrop-filter:blur(8px)}
+.tab{transition:background .15s,color .15s,transform .1s}
+.tab.on{box-shadow:0 2px 10px #6c8cff55}
+.card{border-radius:var(--r);box-shadow:var(--sh)}
+button,.seg div,.chip{transition:background .15s,border-color .15s,transform .1s}
+button:active,.tab:active,.seg div:active{transform:scale(.97)}
+button.pri:hover{filter:brightness(1.08)}
+input[type=text]:focus,select:focus{border-color:var(--acc);outline:none;box-shadow:0 0 0 3px #6c8cff33}
+.seg div{min-height:44px;display:flex;align-items:center;justify-content:center}
+.res.top{background:linear-gradient(180deg,#3ecf8e14,transparent 60%),var(--card)}
+.res .rank{background:var(--card2);border-radius:999px;padding:2px 9px}
+.res.top .rank{background:var(--ok);color:#06210f}
+.name{letter-spacing:-.01em}
+.track{height:10px}
+.fill{transition:width .4s ease}
+.verdict{border-radius:var(--r);box-shadow:var(--sh)}
+.chip{min-height:32px}
+.x{padding:6px 8px;margin:-6px -6px -6px 0}
+.badge{border-radius:999px}
+.status:empty{display:none}
+.empty{border:1px dashed var(--line);border-radius:var(--r)}
+#install-btn{min-height:36px;background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600;margin-left:auto}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<h1>⚔️ Pokémon Battle Helper <span class="mut">· Scarlet / Z-A</span> <button id="install-btn" hidden class="sm" style="min-height:32px;float:right">⬇ Instalar</button></h1>
+<h1>⚔️ Pokémon Battle Helper <span class="mut">· Scarlet / Z-A</span> <button id="install-btn" hidden class="sm">⬇ Instalar</button></h1>
 <div class="row" id="code-row" hidden style="margin-bottom:8px">
   <input type="text" id="code-in" placeholder="Código de acesso (leitura de foto)" autocomplete="off" aria-label="Código de acesso">
   <button id="code-save" class="pri">Salvar</button>

@@ -1,0 +1,14 @@
+{
+  "name": "pokemon-battle-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Recomenda qual Pokémon do seu time mandar (Scarlet/Violet e Legends Z-A).",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "python3 -m http.server 8000 --directory src",
+    "test:node": "node --test --experimental-test-coverage --test-coverage-include=api/*.js --test-coverage-include=src/sw.js --test-coverage-include=scripts/build.mjs --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 tests/node/*.test.js",
+    "test:py": "python3 -m pytest tests -q",
+    "test": "npm run test:node && npm run test:py"
+  }
+}

@@ -169,3 +169,39 @@ def test_pagina_tem_pwa_e_csp_placeholder(mk):
     p = mk([NO_SPEECH], route=api("fail"))
     assert p.get_attribute("link[rel=manifest]", "href") == "manifest.webmanifest"
     assert p.get_attribute("meta[name=theme-color]", "content")
+
+
+# ---------- tema ----------
+def _theme(p):
+    return p.evaluate("()=>document.documentElement.dataset.theme||'auto'")
+
+
+def test_alternar_tema_ciclo_e_persistencia(mk):
+    p = mk([NO_SPEECH], route=api("fail"))
+    assert _theme(p) == "auto" and p.text_content("#theme-btn") == "🌓"
+    p.click("#theme-btn")
+    assert _theme(p) == "dark" and p.get_attribute("#theme-btn", "aria-label") == "Tema: escuro"
+    assert p.evaluate("()=>getComputedStyle(document.body).backgroundColor") == "rgb(15, 17, 21)"
+    p.click("#theme-btn")
+    assert _theme(p) == "light" and p.evaluate("()=>getComputedStyle(document.body).backgroundColor") == "rgb(244, 245, 249)"
+    p.reload_app()
+    assert _theme(p) == "light"
+    p.click("#theme-btn")
+    assert _theme(p) == "auto" and p.evaluate("()=>localStorage.getItem('pbh-theme')") == "auto"
+
+
+def test_tema_escuro_forcado_vence_preferencia_clara_do_sistema(browser, server):
+    ctx = browser.new_context(color_scheme="light")
+    p = ctx.new_page()
+    p.add_init_script("localStorage.setItem('pbh-theme','dark')")
+    p.goto(server + "/index.html")
+    p.wait_for_function("()=>document.body.dataset.ready==='1'")
+    assert p.evaluate("()=>getComputedStyle(document.body).backgroundColor") == "rgb(15, 17, 21)"
+    ctx.close()
+
+
+def test_tema_invalido_ou_sem_localstorage_cai_em_auto(mk):
+    assert _theme(mk([NO_SPEECH, "localStorage.setItem('pbh-theme','roxo')"], route=api("fail"))) == "auto"
+    p = mk([NO_SPEECH, "Storage.prototype.getItem=()=>{throw new Error('x')};Storage.prototype.setItem=()=>{throw new Error('x')}"], route=api("fail"))
+    p.click("#theme-btn")
+    assert _theme(p) == "dark"
